@@ -40,12 +40,6 @@ pipeline {
         stage('Deploy Docker Container') {
             steps {
                 script {
-                    // Stop and remove any existing container with the same name
-                    bat """
-                    docker stop ${env.CONTAINER_NAME} || true
-                    docker rm ${env.CONTAINER_NAME} || true
-                    """
-
                     // Run the new container
                     bat """
                     docker run -d --name ${env.CONTAINER_NAME} -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
