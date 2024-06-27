@@ -20,17 +20,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS_ID) {
-                        dockerImage.push()
-                    }
-                }
-            }
-        }
-
         stage('Deploy Docker Container') {
             steps {
                 sh 'docker run -d -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}'
