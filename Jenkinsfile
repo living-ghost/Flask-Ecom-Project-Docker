@@ -42,7 +42,7 @@ pipeline {
                 script {
                     // Run the new container
                     bat """
-                    docker run -d --name ${env.CONTAINER_NAME} -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
+                    docker run -d --name ${env.CONTAINER_NAME} -p 80:80 ${DOCKER_IMAGE}:${env.BUILD_ID}
                     """
                 }
             }
