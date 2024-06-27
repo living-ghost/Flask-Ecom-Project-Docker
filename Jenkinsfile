@@ -4,6 +4,7 @@ pipeline {
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials-id'
         DOCKER_IMAGE = 'living9host/flask-app'
+        CONTAINER_NAME = 'flask-container'
     }
 
     stages {
@@ -41,13 +42,13 @@ pipeline {
                 script {
                     // Stop and remove any existing container with the same name
                     bat """
-                    docker stop ${CONTAINER_NAME} || true
-                    docker rm ${CONTAINER_NAME} || true
+                    docker stop ${env.CONTAINER_NAME} || true
+                    docker rm ${env.CONTAINER_NAME} || true
                     """
 
                     // Run the new container
                     bat """
-                    docker run -d --name ${CONTAINER_NAME} -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
+                    docker run -d --name ${env.CONTAINER_NAME} -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
                     """
                 }
             }
