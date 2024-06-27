@@ -40,6 +40,11 @@ pipeline {
         stage('Deploy Docker Container') {
             steps {
                 script {
+                    // Stop and remove any existing container with the same name
+                    bat """
+                    docker stop ${env.CONTAINER_NAME} || True
+                    docker rm ${env.CONTAINER_NAME} || True
+                    """
 
                     // Run the new container
                     bat """
