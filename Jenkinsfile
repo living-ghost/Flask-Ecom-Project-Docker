@@ -41,13 +41,13 @@ pipeline {
                 script {
                     // Stop and remove any existing container with the same name
                     bat """
-                    docker stop flask-container
-                    docker rm flask-container
+                    docker stop ${CONTAINER_NAME} || true
+                    docker rm ${CONTAINER_NAME} || true
                     """
 
                     // Run the new container
                     bat """
-                    docker run -d --name flask-container -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
+                    docker run -d --name ${CONTAINER_NAME} -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
                     """
                 }
             }
