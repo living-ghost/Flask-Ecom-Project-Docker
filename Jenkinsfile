@@ -20,10 +20,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Docker Container') {
-            steps {
-                sh 'docker run -d -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}'
-            }
-        }
+
+        
     }
 }
