@@ -3,8 +3,8 @@ pipeline {
     
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials-id'
-        DOCKER_IMAGE = 'living9host/Flask-App'
-        CONTAINER_NAME = 'Flask-Container'
+        DOCKER_IMAGE = 'living9host/flask-app'
+        CONTAINER_NAME = 'flask-container'
     }
 
     stages {
@@ -40,6 +40,7 @@ pipeline {
         stage('Deploy Docker Container') {
             steps {
                 script {
+
                     // Run the new container
                     bat """
                     docker run -d --name ${env.CONTAINER_NAME} -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
