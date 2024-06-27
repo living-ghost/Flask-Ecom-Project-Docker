@@ -11,10 +11,10 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Make port 80 available to the world outside this container
-EXPOSE 8081
+EXPOSE 80
 
 # Define environment variable
 ENV FLASK_APP=run.py
 
 # Run app.py when the container launches
-CMD ["flask", "run", "--host=localhost", "--port=8081"]
+CMD ["flask", "run", "--host=0.0.0.0", "--port=80"]
