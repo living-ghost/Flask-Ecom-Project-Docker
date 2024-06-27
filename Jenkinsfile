@@ -1,37 +1,39 @@
 pipeline {
     agent any
-
+    
     environment {
-        VIRTUALENV = 'venv'
+        DOCKER_CREDENTIALS_ID = 'dockerhub-credentials-id'
+        DOCKER_IMAGE = 'living9host/flask-app'
     }
 
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/living-ghost/Flask-Ecommerce-Project-Beginner-Friendly-.git'
+                git 'https://github.com/your-username/your-flask-repo.git'
             }
         }
 
-        stage('Set Up Python Environment') {
+        stage('Build Docker Image') {
             steps {
                 script {
-                    // Check if virtual environment exists, if not create one
-                    if (!fileExists("${env.WORKSPACE}\\${env.VIRTUALENV}\\Scripts\\activate")) {
-                        bat 'python -m venv venv'
+                    dockerImage = docker.build("${DOCKER_IMAGE}:${env.BUILD_ID}")
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS_ID) {
+                        dockerImage.push()
                     }
                 }
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Deploy Docker Container') {
             steps {
-                bat 'venv\\Scripts\\activate && pip install -r requirements.txt'
-            }
-        }
-
-        stage('Run Flask App') {
-            steps {
-                bat 'venv\\Scripts\\activate && python run.py'
+                sh 'docker run -d -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}'
             }
         }
     }
