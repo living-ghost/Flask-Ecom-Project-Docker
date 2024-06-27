@@ -21,6 +21,32 @@ pipeline {
             }
         }
 
-        
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry('https://registry.hub.docker.com', DOCKER_CREDENTIALS_ID) {
+                        try {
+                            dockerImage.push()
+                            echo 'Image pushed successfully'
+                        } catch (Exception e) {
+                            echo "Failed to push image: ${e.getMessage()}"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Deploy Docker Container') {
+            steps {
+                script {
+                    try {
+                        sh "docker run -d -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}"
+                        echo 'Container deployed successfully'
+                    } catch (Exception e) {
+                        echo "Failed to deploy container: ${e.getMessage()}"
+                    }
+                }
+            }
+        }
     }
 }
