@@ -3,8 +3,8 @@ pipeline {
     
     environment {
         DOCKER_CREDENTIALS_ID = 'dockerhub-credentials-id'
-        DOCKER_IMAGE = 'living9host/flask-app'
-        CONTAINER_NAME = 'flask-container'
+        DOCKER_IMAGE = 'living9host/Flask-App'
+        CONTAINER_NAME = 'Flask-Container'
     }
 
     stages {
