@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/your-username/your-flask-repo.git'
+                git 'https://github.com/living-ghost/Flask-Ecom-Project-Docker.git'
             }
         }
 
