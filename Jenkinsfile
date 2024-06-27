@@ -40,9 +40,17 @@ pipeline {
         stage('Deploy Docker Container') {
             steps {
                 script {
-                    // Run the new container
+                    // Define the container name and image variables
+                    def containerName = "${env.CONTAINER_NAME}"
+                    def imageName = "${DOCKER_IMAGE}:${env.BUILD_ID}"
+
                     bat """
-                    docker run -d --name ${env.CONTAINER_NAME} -p 80:80 ${DOCKER_IMAGE}:${env.BUILD_ID}
+                    // Stop and remove any existing container with the same name
+                    docker stop ${containerName} || true
+                    docker rm ${containerName} || true
+
+                    // Run the new container
+                    docker run -d --name ${containerName} -p 80:80 ${imageName}
                     """
                 }
             }
