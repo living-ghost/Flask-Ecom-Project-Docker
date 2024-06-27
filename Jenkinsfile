@@ -39,12 +39,18 @@ pipeline {
         stage('Deploy Docker Container') {
             steps {
                 script {
-                    try {
-                        sh "docker run -d -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}"
-                        echo 'Container deployed successfully'
-                    } catch (Exception e) {
-                        echo "Failed to deploy container: ${e.getMessage()}"
-                    }
+                    // Stop and remove any existing container with the same name
+                    sh """
+                    if [ \$(docker ps -q -f name=flask-container) ]; then
+                        docker stop flask-container
+                        docker rm flask-container
+                    fi
+                    """
+
+                    // Run the new container
+                    sh """
+                    docker run -d --name flask-container -p 5000:5000 ${DOCKER_IMAGE}:${env.BUILD_ID}
+                    """
                 }
             }
         }
